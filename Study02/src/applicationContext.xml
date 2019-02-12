@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:http="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--配置目标对象：被增强的对象-->
+    <bean id="productDao" class="com.cx.study4.ProductDaoImpl"/>
+
+    <!--将切面类交给Spring 管理-->
+    <bean id="myAspect" class="com.cx.study4.MyAspectXML"/>
+
+    <!--通过AOP的配置完成对目标类产生代理-->
+    <aop:config>
+        <!--表达式配置哪些类的方法需要进行增强-->
+        <aop:pointcut id="pointcut1" expression="execution(* com.cx.study4.ProductDaoImpl.save(..))"/>
+        <aop:pointcut id="pointcut2" expression="execution(* com.cx.study4.ProductDaoImpl.update(..))"/>
+        <aop:pointcut id="pointcut3" expression="execution(* com.cx.study4.ProductDaoImpl.update(..))"/>
+        <aop:pointcut id="pointcut4" expression="execution(* com.cx.study4.ProductDaoImpl.find(..))"/>
+        <aop:pointcut id="pointcut5" expression="execution(* com.cx.study4.ProductDaoImpl.find(..))"/>
+
+        <!--配置切面-->
+        <!--前置通知-->
+        <aop:aspect ref="myAspect">
+            <aop:before method="checkPri" pointcut-ref="pointcut1"/>
+            <!--后置通知 returning:返回值名称-->
+            <aop:after-returning method="writeLog" pointcut-ref="pointcut2" returning="result"/>
+            <!--环绕通知-->
+            <aop:around method="around" pointcut-ref="pointcut3"/>
+            <!--异常抛出通知-->
+            <aop:after-throwing method="afterThrowing" pointcut-ref="pointcut4"/>
+            <!--最终通知-->
+            <aop:after method="after" pointcut-ref="pointcut5"/>
+        </aop:aspect>
+
+    </aop:config>
+</beans>

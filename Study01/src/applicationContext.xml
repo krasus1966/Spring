@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd"
+       xmlns:context="http://www.springframework.org/schema/context"
+>
+
+    <!--Spring的入门配置-->
+    <!--<bean> id:使用唯一约束，不能出现特殊字符。name:没有使用唯一约束，可以出现特殊字符-->
+    <bean id="userDao" class="com.cx.study.UserDaoImpl">
+        <property name="Name" value="李东"/>
+    </bean>
+
+    <!-- Spring的属性注入方式 -->
+    <bean id="car" class="com.cx.study.Car">
+        <constructor-arg name="name" value="宝马"/>
+        <constructor-arg name="price" value="80"/>
+    </bean>
+
+    <!--<bean id="car2" class="Car2">-->
+    <!--<property name="name" value="宝马12" />-->
+    <!--<property name="price" value="200" />-->
+    <!--</bean>-->
+
+    <!--改为p名称空间的方式:beans要加命名空间-->
+    <!--<bean id="car2" class="Car2" p:name="WW" p:price="3000"/>-->
+
+    <!--spEL的属性注入-->
+    <bean id="car2" class="com.cx.study.Car2">
+        <property name="name" value="#{'三蹦子'}"/>
+        <property name="price" value="#{3000}"/>
+    </bean>
+
+
+    <bean id="employee" class="com.cx.study.Employee">
+        <!--value:设置普通类型的值，ref:设置其他的类的id或name-->
+        <property name="name" value="a"/>
+        <property name="car2" ref="car2"/>
+    </bean>
+
+    <!--集合属性注入-->
+    <bean id="collection" class="com.cx.study.Collection">
+        <!--数组类型-->
+        <property name="args">
+           <list>
+               <value>ni</value>
+               <value>wo</value>
+               <value>ta</value>
+           </list>
+        </property>
+    </bean>
+
+    <!--Spring的IOC的注解入门-->
+    <!--使用IOC的注释开发，配置扫描-->
+    <context:component-scan base-package="com.cx.study2" />
+</beans>
